@@ -1,13 +1,16 @@
-import "./styles.css";
+// I am not finished! Sorry in advance....
+
 import React, { useState, useEffect } from "react";
+import List from "./Components/List";
 //import { formatProductData } from "./helperFunctions"
 
-const url = `http://52.26.193.201:3000/products/list`;
+const url = `http://52.26.193.201:3000/products/list/`;
 
 function getData(url) {
   return fetch(url)
     .then((response) => response.json())
-    .then(formatData);
+    .then(formatData)
+    .then(console.log);
 }
 
 function formatData(data) {
@@ -16,19 +19,30 @@ function formatData(data) {
 
 const App = () => {
   let [productData, setProductData] = useState([]);
-
+  let [product, setProduct] = useState([]);
   useEffect(() => {
     getData(url).then((allProductData) => {
       setProductData(allProductData);
     });
   }, []);
 
+  const productClicked = (id) => {
+    let productSearch = "http://52.26.193.201:3000/products/" + id;
+    fetch(productSearch)
+      .then((response) => response.json())
+      .then((data) => setProduct(data))
+      .catch((error) => alert("Product not found."));
+  };
+
   return (
-    <div>
-      <h2> {productData} </h2>
+    <div className="App">
+      <List products={productData} productClicked={productClicked} />
     </div>
   );
 };
+
+export default App;
+
 //   useEffect(() => {
 //     const url = `http://52.26.193.201:3000/products/list`;
 
@@ -52,8 +66,6 @@ const App = () => {
 //     </div>
 //   );
 // };
-
-export default App;
 
 // useEffect(() => {
 //   const url = `http://52.26.193.201:3000/products/list`;
