@@ -1,32 +1,57 @@
 import "./styles.css";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+//import { formatProductData } from "./helperFunctions"
+
+const url = `http://52.26.193.201:3000/products/list`;
+
+function getData(url) {
+  return fetch(url)
+    .then((response) => response.json())
+    .then(formatData);
+}
+
+function formatData(data) {
+  return data;
+}
 
 const App = () => {
-  const [productName, setProductName] = useState("");
+  let [productData, setProductData] = useState([]);
 
   useEffect(() => {
-    const url = `http://52.26.193.201:3000/products/list`;
-
-    const fetchData = async () => {
-      try {
-        const response = await fetch(url);
-        const json = await response.json();
-        console.log(response);
-        setProductName(json.name);
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-
-    fetchData();
+    getData(url).then((allProductData) => {
+      setProductData(allProductData);
+    });
   }, []);
 
   return (
     <div>
-      <h2>{productName}</h2>
+      <h2> {productData} </h2>
     </div>
   );
 };
+//   useEffect(() => {
+//     const url = `http://52.26.193.201:3000/products/list`;
+
+//     const fetchData = async () => {
+//       try {
+//         const response = await fetch(url);
+//         const json = await response.json();
+//         console.log(response);
+//         setProductName(json.name);
+//       } catch (error) {
+//         console.log("error", error);
+//       }
+//     };
+
+//     fetchData();
+//   }, []);
+
+//   return (
+//     <div>
+//       <h2>{productName}</h2>
+//     </div>
+//   );
+// };
 
 export default App;
 
